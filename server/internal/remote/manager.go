@@ -50,11 +50,20 @@ func (manager *RemoteManager) AudioCodec() string {
 func (manager *RemoteManager) Start() {
 	xorg.Display(manager.config.Display)
 
-	if !xorg.ValidScreenSize(manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate) {
-		manager.logger.Warn().Msgf("invalid screen option %dx%d@%d", manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate)
-	} else if err := xorg.ChangeScreenSize(manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate); err != nil {
+	size := manager.GetScreenSize()
+	manager.config.ScreenWidth = size.Width
+	manager.config.ScreenHeight = size.Height
+	manager.config.ScreenRate = int(size.Rate)
+
+	if err := xorg.ChangeScreenSize(size.Width, size.Height, int(size.Rate)); err != nil {
 		manager.logger.Warn().Err(err).Msg("unable to change screen size")
 	}
+	//
+	//if !xorg.ValidScreenSize(manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate) {
+	//	manager.logger.Warn().Msgf("invalid screen option %dx%d@%d", manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate)
+	//} else if err := xorg.ChangeScreenSize(manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate); err != nil {
+	//	manager.logger.Warn().Err(err).Msg("unable to change screen size")
+	//}
 
 	manager.createPipelines()
 	if err := manager.broadcast.Start(); err != nil {

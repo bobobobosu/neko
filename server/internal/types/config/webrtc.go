@@ -5,8 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"m1k1o/neko/internal/utils"
-
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -96,14 +94,14 @@ func (s *WebRTC) Set() {
 		s.ICEServers = append(s.ICEServers, webrtc.ICEServer{URLs: iceServerSlice})
 	}
 
-	if len(s.NAT1To1IPs) == 0 {
-		ipfetch := viper.GetString("ipfetch")
-		ip, err := utils.GetIP(ipfetch)
-		if err != nil {
-			log.Panic().Err(err).Str("ipfetch", ipfetch).Msg("failed to fetch ip address")
-		}
-		s.NAT1To1IPs = append(s.NAT1To1IPs, ip)
-	}
+	//if len(s.NAT1To1IPs) == 0 {
+	//	ipfetch := viper.GetString("ipfetch")
+	//	ip, err := utils.GetIP(ipfetch)
+	//	if err != nil {
+	//		log.Panic().Err(err).Str("ipfetch", ipfetch).Msg("failed to fetch ip address")
+	//	}
+	//	s.NAT1To1IPs = append(s.NAT1To1IPs, ip)
+	//}
 
 	min := uint16(59000)
 	max := uint16(59100)
