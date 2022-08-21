@@ -235,20 +235,6 @@ void XGetScreenConfigurations() {
       goSetScreenRates(i, j, rates[j]);
     }
   }
-
-  int i = num_sizes;
-  goCreateScreenSize(i, 3840, 2160, -1, -1);
-  goSetScreenRates(i, 0, 60);
-  i += 1;
-  goCreateScreenSize(i, 2560, 1600, -1, -1);
-  goSetScreenRates(i, 0, 60);
-  i += 1;
-  goCreateScreenSize(i, 2048, 1536, -1, -1);
-  goSetScreenRates(i, 0, 60);
-  i += 1;
-  goCreateScreenSize(i, 1920, 1080, -1, -1);
-  goSetScreenRates(i, 0, 60);
-  i += 1;
 }
 
 void XSetScreenConfiguration(int index, short rate) {
