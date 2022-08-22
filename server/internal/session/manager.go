@@ -250,5 +250,6 @@ func (manager *SessionManager) OnCreated(listener func(id string, session types.
 func (manager *SessionManager) OnConnected(listener func(id string, session types.Session)) {
 	manager.emmiter.On("connected", func(payload ...interface{}) {
 		listener(payload[0].(string), payload[1].(*Session))
+		manager.remote.ChangeResolution(0, 0, 0)
 	})
 }
