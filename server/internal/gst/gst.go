@@ -80,7 +80,7 @@ func CreateRTMPPipeline(pipelineDevice string, pipelineDisplay string, pipelineS
 
 // CreateAppPipeline creates a GStreamer Pipeline
 func CreateAppPipeline(codecName string, pipelineDevice string, pipelineSrc string, fps int, bitrate uint, hwenc string) (*Pipeline, error) {
-	pipelineStr := " ! appsink name=appsink"
+	pipelineStr := " ! appsink name=appsink max-buffers=1 drop=True"
 
 	// if using custom pipeline
 	if pipelineSrc != "" {
