@@ -2,11 +2,10 @@ package session
 
 import (
 	"fmt"
-	"sync"
-
 	"github.com/kataras/go-events"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"sync"
 
 	"m1k1o/neko/internal/types"
 	"m1k1o/neko/internal/utils"
@@ -109,6 +108,8 @@ func (manager *SessionManager) Get(id string) (types.Session, bool) {
 // TODO: Handle locks in sessions as flags.
 func (manager *SessionManager) SetControlLocked(locked bool) {
 	manager.controlLocked = locked
+	manager.remote.StopStream()
+	manager.remote.StartStream()
 }
 
 func (manager *SessionManager) CanControl(id string) bool {
@@ -250,6 +251,8 @@ func (manager *SessionManager) OnCreated(listener func(id string, session types.
 func (manager *SessionManager) OnConnected(listener func(id string, session types.Session)) {
 	manager.emmiter.On("connected", func(payload ...interface{}) {
 		listener(payload[0].(string), payload[1].(*Session))
-		manager.remote.ChangeResolution(0, 0, 0)
 	})
 }
+
+//time.Sleep(3 * time.Second)
+//manager.remote.ChangeResolution(0, 0, 0)
