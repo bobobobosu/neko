@@ -160,12 +160,16 @@ func (manager *RemoteManager) createPipelines() {
 	}
 }
 
-func (manager *RemoteManager) ChangeResolution(a int, b int, c int) error {
-	size := manager.GetScreenSize()
-	manager.config.ScreenWidth = size.Width
-	manager.config.ScreenHeight = size.Height
-	manager.config.ScreenRate = int(size.Rate)
-	rate := int(size.Rate)
+func (manager *RemoteManager) ChangeResolution(width int, height int, rate int) error {
+	if !xorg.ValidScreenSize(width, height, rate) {
+		manager.logger.Warn().Msgf("invalid screen option %dx%d@%d", manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate)
+	} else if err := xorg.ChangeScreenSize(width, height, rate); err != nil {
+		manager.logger.Warn().Err(err).Msg("unable to change screen size")
+	} else {
+		manager.config.ScreenWidth = width
+		manager.config.ScreenHeight = height
+		manager.config.ScreenRate = rate
+	}
 
 	manager.video.Stop()
 	manager.broadcast.Stop()
