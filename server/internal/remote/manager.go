@@ -161,16 +161,6 @@ func (manager *RemoteManager) createPipelines() {
 }
 
 func (manager *RemoteManager) ChangeResolution(width int, height int, rate int) error {
-	if !xorg.ValidScreenSize(width, height, rate) {
-		manager.logger.Warn().Msgf("invalid screen option %dx%d@%d", manager.config.ScreenWidth, manager.config.ScreenHeight, manager.config.ScreenRate)
-	} else if err := xorg.ChangeScreenSize(width, height, rate); err != nil {
-		manager.logger.Warn().Err(err).Msg("unable to change screen size")
-	} else {
-		manager.config.ScreenWidth = width
-		manager.config.ScreenHeight = height
-		manager.config.ScreenRate = rate
-	}
-
 	manager.video.Stop()
 	manager.broadcast.Stop()
 
@@ -182,6 +172,14 @@ func (manager *RemoteManager) ChangeResolution(width int, height int, rate int) 
 
 		manager.logger.Info().Msg("starting video pipeline...")
 	}()
+
+	if xorg.ValidScreenSize(width, height, rate) {
+		if err := xorg.ChangeScreenSize(width, height, rate); err == nil {
+			manager.config.ScreenWidth = width
+			manager.config.ScreenHeight = height
+			manager.config.ScreenRate = rate
+		}
+	}
 
 	// handle maximum fps
 	if manager.config.MaxFPS != 0 && manager.config.MaxFPS < rate {
