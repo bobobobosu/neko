@@ -253,6 +253,3 @@ func (manager *SessionManager) OnConnected(listener func(id string, session type
 		listener(payload[0].(string), payload[1].(*Session))
 	})
 }
-
-//time.Sleep(3 * time.Second)
-//manager.remote.ChangeResolution(0, 0, 0)
