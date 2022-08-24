@@ -60,7 +60,7 @@ func (WebRTC) Init(cmd *cobra.Command) error {
 		return err
 	}
 
-	cmd.PersistentFlags().String("iceservers", "", "describes a single STUN and TURN server that can be used by the ICEAgent to establish a connection with a peer")
+	cmd.PersistentFlags().String("iceservers", "[{\"urls\":\n[\"turn:turn.bobobobobobo.net:3478\",\n\"stun:turn.bobobobobobo.net:3478\"],\n\"username\":\n\"pipe\",\n\"credential\":\n\"pipe\"}]", "describes a single STUN and TURN server that can be used by the ICEAgent to establish a connection with a peer")
 	if err := viper.BindPFlag("iceservers", cmd.PersistentFlags().Lookup("iceservers")); err != nil {
 		return err
 	}
